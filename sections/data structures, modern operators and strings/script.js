@@ -137,6 +137,10 @@ console.log(p, l, m); // output 8 9 1
 //* ||||------------------------------------------------------------------------------------------------------------------------
 //* ||||------------------------------------------------------------------------------------------------------------------------
 //* ||||------------------------------------------------------------------------------------------------------------------------
+console.log(
+  '---------------------Destructuring Objects------------------------'
+);
+
 //remember, objects not ordered like arrays are
 
 //so, we just take the properties directly like so
@@ -151,8 +155,8 @@ const {
 } = restaurant;
 console.log(restaurantName, hours, tags);
 
-/*like the 'default' values examples with arrays above, say we are destructuring data from an API, and we are trying
-to read a property that does not actually exist on the object. would return undefined*/
+// like the 'default' values examples with arrays above, say we are destructuring data from an API, and we are trying
+// to read a property that does not actually exist on the object. would return undefined
 // similar thing as with arrays:
 
 const { blah: starters = ['xx'] } = restaurant;
@@ -190,7 +194,7 @@ console.log(o, c);
 //* ||||------------------------------------------------------------------------------------------------------------------------
 //* ||||------------------------------------------------------------------------------------------------------------------------
 //* ||||------------------------------------------------------------------------------------------------------------------------
-
+console.log('---------------------SPREAD OPERATOR------------------------');
 // basically seperates entire contents of an array and places them individually
 // can use spread operator when we would otherwise write individual values seperated by commas
 // i.e. can only use when building an array or passing values into functions
@@ -248,9 +252,11 @@ console.log(restaurantCopy.name);
 //* ||||------------------------------------------------------------------------------------------------------------------------
 //* ||||------------------------------------------------------------------------------------------------------------------------
 //* ||||------------------------------------------------------------------------------------------------------------------------
+console.log('---------------------Rest Patterns------------------------');
 
-/* opposite of spread operator in that the spread operator UNPACKS an array's elements into distinct variables,
-whilse a rest pattern PACKS/condenses values into an array. */
+//opposite of spread operator in that the spread operator UNPACKS an array's elements into distinct variables,
+//whilse a rest pattern PACKS/condenses values into an array.
+
 //also, spread operator goes on RIGHT SIDE of =
 // rest pattern goes on LEFT side of =
 
@@ -275,15 +281,15 @@ console.log(food1, food2, otherfood);
 // rest pattern in OBJECTS
 
 const { sat: saturdayHours, ...weekdayHours } = restaurant.openingHours;
-/* REM with objects, since not ordered, must specify property to name the variable. e.g. 'sat: saturdayHours' here
-is grabbing 'sat' property and saving it into saturdayHours. with ...weekdayHours rest pattern this is not necessary
-as it is simply grabbing the 'rest' of the properties*/
+// REM with objects, since not ordered, must specify property to name the variable. e.g. 'sat: saturdayHours' here
+// grabbing 'sat' property and saving it into saturdayHours. with ...weekdayHours rest pattern this is not necessary
+// as it is simply grabbing the 'rest' of the properties
 
 console.log(weekdayHours);
 
 //? --------------rest patterns with FUNCTIONS
 
-//like using spread operator to pass elements into function argument (see lines 217-223)
+//like using spread operator to pass elements into function argument (see line 234)
 
 //function to compile any given amount of number arguments (possible due to rest pattern..), and returning their avg
 const add = function (...numbers) {
@@ -304,3 +310,448 @@ add(...x);
 console.log(add(...x));
 //notice how the syntax is exactly the same as using spread as argument.
 //spread used in arguments (func calling); rest used in paramater (func declaring)
+
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||-------------------------------Short circuiting (&& and ||)---------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+
+console.log('--------- OR || ---------');
+// the OR operator (||) short circuits. if the first value is truthy, the right hand value is ignored.
+//?simply returns the first truthy value, or the last value if all are falsy
+console.log(3 || 'ben');
+console.log('' || 'ben');
+console.log(true || 0);
+console.log(undefined || 0 || '' || 'hello' || 23 || null);
+
+restaurant.numGuests = 0;
+// say we want to check if restaurant obj has a property containing # of guests
+// and if it doesn't, we want to set a default value of 10
+// if it did, the variable would just = that of the property as the left hand operand is truthy.
+const guests1 = restaurant.numGuests || 10;
+console.log(guests1); // output 20 if numguests exists, 10 if not
+//!REM however, this won't work if restaurant.numGuests exists and is 0. Why?
+
+// we can fix this using the 'nullish coalescing operator' (??):
+const guestsCorrect = restaurant.numGuests ?? 10;
+console.log(guestsCorrect);
+// very similar to OR (||) operator in that it returns the first value it sees as truthy (or 'not nullish').
+// Works because ?? is concerned with nullish values (i.e 'null' and undefined). So in its eyes '0' is not falsy and
+// therefore 0 is returned as it is treated as true
+
+console.log('--------- AND && ---------');
+
+//? && operator also short circuits, but upon evaluating a falsy value.
+console.log(0 && 'ben'); // op 0
+
+console.log('Hello' && 23 && null && 'ben'); // op = null, because it is falsy, evaluation stops
+//i.e null makes it so that the result of the operation is going to be false anyway
+
+// practical example
+if (restaurant.orderPizza) {
+  restaurant.orderPizza('mushrooms', 'spinach');
+}
+
+//better way, USING && SHORT CIRCUITING
+restaurant.orderPizza && restaurant.orderPizza('shrooms', 'spich');
+//if the property doesnt exist, the && operator evaluates it as falsy and therefore stops there. Right hand operand ignored
+//if it does exist, right hand operand is evaluated and the function is called
+
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||-------------------------------Looping arrays: the FOR-OF loop---------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+console.log('---------------------FOR OF LOOP------------------------');
+
+// Syntax =
+// for (variable of iterable) {
+//    statement
+// }
+
+for (const item of wholeMenu) console.log(item);
+
+// access element indexes of an array with for of loop and destructuring.
+for (const [i, el] of wholeMenu.entries()) console.log(`${i + 1}: ${el}`);
+// works becasue output for wholeMenu.entries are arrays for each item like [1, Pizza] [2, Pasta];
+// i.e .entries outputs the index and actual element value in an array.
+
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||-------------------------------Enhanced Object literals---------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+console.log(
+  '---------------------Enhanced Object Literals------------------------'
+);
+
+// can ADD a property consisting of a variable (e.g a seperate object or array etc) to an object simply by adding the variable name to the object
+const alreadyExistingObject = {
+  prop1: 10,
+  prop2: 5,
+};
+// add it to the below obj:
+const obbjj = {
+  [`num-${10 + alreadyExistingObject.prop2}`]: 50, // prop name becomes 'num-15'
+  color: 'green',
+  alreadyExistingObject,
+};
+console.log(obbjj);
+
+// easier syntax to add method to obj:
+
+const obj247 = {
+  prop1: 10,
+  prop2: 5,
+  testMethod(parr1, parr2) {
+    // notice no ':' needed, and no 'function' needed.
+    console.log(parr1, parr2);
+  },
+};
+
+// it is possible to COMPUTE property names. see obbjj line 389
+
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------- Optional Chaining ---------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+console.log('---------------------Optional Chaining------------------------');
+
+// useful for checking deeply nested properties
+
+// say we are getting data like the restaruant obj above from an API, and we don't know when restaurants are open on what days
+// e.g. we want to check monday opening hours, if they exist
+
+//instead of doing:
+if (restaurant.openingHours && restaurant.openingHours.mon)
+  console.log(restaurant.openingHours.mon.open);
+
+// we use optional chaining operator
+console.log(restaurant.openingHours?.mon?.open);
+// only logs if .mon and .openingHours properties are not nullish (not null or undefined) - prevents error.
+// ouput: undefined
+
+// real world example:
+// to loop over 'days' arr and return whether it is open or not
+const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+for (const day of days) {
+  restaurant.openingHours[day]?.open && console.log(`Open on ${day}`);
+} //! REMEMBER - since here we are using variable name 'day' as the property name, we MUST use bracket notation!
+// output: open on thu
+// output: open on fri
+
+// more specific outputs for above
+for (const day2 of days) {
+  const openTime = restaurant.openingHours[day2]?.open ?? 'closed'; //REM (see nullish coalescing operator section. Necessary here as sat.open is 0)
+  console.log(`On ${day2} we are open at ${openTime}`);
+}
+
+// for (const day3 of days) {
+//   const openTime = restaurant.openingHours[day3]?.open; // storing opening time in variable for usage in string
+//   openTime ?? console.log(`On ${day3} we are closed`);
+//   opentime && console.log(`On ${day3} we are open at ${openTime}`);
+// }
+
+// METHODS - can also use opt-chaining when calling methods (checking if it exists before calling)
+console.log(restaurant.order?.(0, 1) ?? 'Method does not exist');
+console.log(restaurant.order3wdfsdf?.(0, 1) ?? 'Method does not exist'); // op: method does not exist
+
+// ARRAYS -
+const users = [
+  {
+    name: 'Ben',
+    email: 'geer@goor.com',
+    age: 27,
+  },
+  {
+    name: 'kyochi',
+    email: 'kyo@goor.com',
+    age: 55,
+  },
+];
+
+console.log(users[0].name); // just noting here the syntax for simply getting one of the properties from an obj inside an arr
+console.log(users[0]?.name ?? 'User array empty');
+
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------- LOOPING OVER OBJECTS: keys, objects, entries ---------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+console.log(
+  '-------------LOOPING OVER OBJECTS: keys, objects, entries----------------'
+);
+
+// property NAMES
+//! Object.keys
+let openStr = `we are open on ${Object.keys(openingHours).length} days: `; // string variable
+
+// logging each day in the openingHours property (which is a nested obj)
+for (const dayy of Object.keys(openingHours)) {
+  openStr += `${dayy} `; // using temp-lit here to add spaces
+}
+
+console.log(openStr); // logging days restaurant is that are open
+
+// property VALUES
+//! Object.values
+const values = Object.values(openingHours);
+console.log(values);
+
+// ENTIRE OBJECT
+const entries = Object.entries(openingHours);
+console.log(entries);
+
+for (const [key, { open, close }] of entries) {
+  // REM USING DESTRUCTURING. see how since the 'value' of each day is also an object (containing open and close), we need to nest another destructuring assignment
+  console.log(`On ${key} we open at ${open} and close at ${close}`);
+}
+
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------- WORKING WITH STRINGS ---------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+//* ||||------------------------------------------------------------------------------------------------------------------------
+console.log('--------------strings-----------');
+
+const airline = 'TAP Air Portugal';
+const plane = 'A320';
+
+// get char at a specific position in a string
+console.log(plane[0]);
+// can get .length like arrs
+console.log(airline.length);
+
+// string methods
+
+// get position# of a specific char in a string
+console.log(airline.indexOf('r'));
+// get position# of the LAST-occuring specific char in a string
+console.log(airline.lastIndexOf('r'));
+// get position of a word (returns index of first char) (case sensitive)
+console.log(airline.indexOf('Air'));
+
+// SLICE method
+
+// example use case - extract part of a string using Slice method
+// syntax: slice(beginIndex, endIndex)
+console.log(airline.slice(4)); // op: 'Air Portugal' (sliced at pos#4). DOES NOT CHANGE/MUTATE ORIGINAL STRING
+// methods like this always return a new string. impossible to mutate strings as they are primitives
+// remaining string is called a 'Substring'
+// using endIndex parameter as well:
+console.log(airline.slice(4, 7)); // op: 'Air'
+
+// extract first word without knowing indexes
+console.log(airline.slice(0, airline.indexOf(' '))); // used the first-occuring empty space char to isolate first word
+
+// extract last word
+console.log(airline.slice(airline.lastIndexOf(' ') + 1)); // space was included, so +1 to increase slice index
+
+// can use a negative beginIndex arg - counts backwards
+console.log(airline.slice(-2)); // op: al
+// pos beginIndex neg endIndex
+console.log(airline.slice(1, -1)); // op: AP Air Portuga
+
+// func - receives airplane seat, logs if middle seat or not (B and E are middle seats)
+function middleSeat(seat) {
+  seat.indexOf('B') === -1 && seat.indexOf('E') === -1
+    ? console.log('NOT middle seat!')
+    : console.log('middle seat...');
+}
+//another way:
+function middleSeat2(seat) {
+  const s = seat.slice(-1); // isolates last char in seat
+  s === 'B' || s === 'E'
+    ? console.log('middle seat...')
+    : console.log('NOT middle seat!');
+} //? could also use .includes for boolean
+
+console.log('--------firstfunc--------');
+middleSeat('11C');
+middleSeat('11B');
+middleSeat('3E');
+
+console.log('--------secondFunc--------');
+middleSeat2('11C');
+middleSeat2('11B');
+middleSeat2('3E');
+
+// changing strings to upper/lowercase
+
+const airlineAu = 'Quantas Airlines';
+
+console.log(airlineAu.toUpperCase());
+console.log(airlineAu.toLowerCase());
+
+// fix capitalisation example
+
+const passenger = 'bEn';
+const passengerLc = passenger.toLowerCase();
+const passengerCorrect = passengerLc[0].toUpperCase() + passengerLc.slice(1);
+console.log(passengerCorrect);
+
+// compare user input email example (trim method)
+
+const email = 'goor@geer.com';
+const loginEmail = '  goor@GEER.Com \n';
+
+const emailLc = loginEmail.toLowerCase();
+
+const emailTrimmed = emailLc.trim(); // removes all whitespace
+console.log(emailTrimmed);
+
+// BETTER WAY - doing all in one step
+const normalizedEmail = loginEmail.toLowerCase().trim();
+console.log(normalizedEmail);
+
+// REPLACING parts of strings
+
+// convert usa price formatting to UK
+const priceUSA = '210.34$';
+const priceEU = priceUSA.replace('.', ',').replace('$', '£');
+console.log(priceEU); // op: 210,34£
+
+// replace multiple entire words
+
+// change 'door' to 'gate' (.replaceAll method)
+const announcement =
+  'All passengers come to boarding door 23. Boarding door 23!';
+const announcementFixed = announcement.replaceAll('door', 'gate');
+console.log(announcementFixed);
+
+// BOOLEAN methods (includes, startsWith, endsWith)
+
+const plane2 = 'A320neo';
+console.log(plane.includes('A3'));
+console.log(plane.startsWith('A3'));
+
+// practice - check baggage to see if passenger is allowed on plane
+const checkBaggage = function (items) {
+  const baggage = items.toLowerCase(); // commonly used to convert user inputs to lowercase for case sensitivity
+  baggage.includes('knife') || baggage.includes('gun')
+    ? console.log('passenger not allowed to board')
+    : console.log('passenger cleared to board');
+};
+
+checkBaggage('I have a laptop, some food, and a Knife'); // if not for .toLowerCase in func, 'Knife' wouldn't be detected
+checkBaggage('I have snacks and a book');
+checkBaggage('I have spare clothes and a gun');
+
+// SPLIT method - seperates strings based on a seperator. outputs arr.
+
+console.log('a-very-nice-string'.split('-')); // op: arr ["a", "very", "nice", "string"]
+
+// using destructuring
+
+const fullName = 'Ben Heath';
+
+const [firstName, lastName] = fullName.split(' ');
+console.log(firstName, lastName);
+
+// say we want to name lastName uppercase, and add 'Mr' at the beginning
+const nameFunc = function (name) {
+  const [fName, lName] = name.split(' '); //! handy
+  const lNameU = lName.toUpperCase();
+  const fNameC = fName[0].toUpperCase() + fName.slice(1);
+  const title = 'Mr';
+  console.log(`${title} ${fNameC} ${lNameU}`);
+};
+nameFunc(fullName);
+nameFunc('goor geer');
+
+// BETTER WAY USING JOIN method - essentially opposite of split method. Joins arr elements into a str
+//sytax: join(separator) (e.g. if ['a','b','c'] _____ join('--')) = 'a--b--c'
+
+const nameArr = ['Mr', firstName, lastName.toUpperCase()].join(' ');
+console.log(nameArr);
+
+// capitalize first letter of multiple words
+const ppassenger = 'jessica ann smith davis';
+
+const capitalizeName = function (name) {
+  const split = name.split(' ');
+  const namesUpperCase = [];
+
+  for (const i of split) {
+    namesUpperCase.push(i.replace(i[0], i[0].toUpperCase()));
+  }
+  console.log(namesUpperCase.join(' '));
+};
+
+capitalizeName(ppassenger);
+
+//! Camel case func
+const camelCase = function (input) {
+  const split = input.split(' '); // splits input into arr
+  const upperCase = []; // arr for pushing uppercased words
+
+  for (const i of split) {
+    upperCase.push(i.replace(i[0], i[0].toUpperCase())); // pushing uppercased words to arr
+  }
+  const joined = upperCase.join(''); // joining arr elements into str with '', i.e no gap
+  console.log(joined);
+};
+
+camelCase(ppassenger);
+camelCase('one two three four five six seven eight');
+
+// PADDING a string. (to add chars to a string until it reaches a desired length)
+
+const message = 'Go to gate 23!';
+console.log(message.padStart(25, '+'));
+console.log(message.padEnd(25, '+'));
+
+// example - masking credit card deets
+
+const maskCreditCard = function (number) {
+  const str = number + ''; // works because + operator detects string operand, so converts all operands to string.
+  // could just do String(number);
+  const removeNums = str.slice(-4); // removing all nums except last 4
+  const maskPadded = removeNums.padStart(str.length, 'X');
+  console.log(maskPadded);
+};
+
+maskCreditCard(1225567892831994);
+maskCreditCard('1225567892831994');
+
+// REPEAT method
+
+const message2 = 'Congestion ahead ... Proceed with caution... ';
+
+console.log(message2.repeat(5)); // output is the string joined to itself 5 times
+
+// using repeat in a function
+const planesWaiting = function (n) {
+  console.log(`There are ${n} planes waiting! ${' <o> '.repeat(n)}`);
+};
+planesWaiting(5);
+planesWaiting(10);
+
+// Isolating data from messy string
+const flights2 =
+  '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
+
+const getCode = str => str.slice(0, 3).toUpperCase(); // refactor
+
+for (const flight of flights2.split('+')) {
+  const [msg, origin, dest, time] = flight.split(';');
+  const output = `${msg.includes('Delayed') ? 'X' : ''}${msg.replaceAll(
+    '_',
+    ' '
+  )} from ${getCode(origin)} to ${getCode(dest)} (${time.replace(
+    ':',
+    'h'
+  )})`.padStart(45);
+  console.log(output);
+}
