@@ -57,7 +57,7 @@ console.log('friend:', friend); //output shows age as 27
 console.log('me:', me); //output shows age as 27
 
 // (SEE .png)
-// primitives stored in callsack
+// primitives stored in callstack
 // objects stored in memory heap
 
 //so, const is only immutable via primitives. Whereas const objects are mutable.
