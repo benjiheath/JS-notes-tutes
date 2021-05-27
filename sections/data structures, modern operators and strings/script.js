@@ -309,7 +309,7 @@ const x = [23, 5, 7];
 add(...x);
 console.log(add(...x));
 //notice how the syntax is exactly the same as using spread as argument.
-//spread used in arguments (func calling); rest used in paramater (func declaring)
+//!spread used in arguments (func calling); rest used in paramater (func declaring)
 
 //* ||||------------------------------------------------------------------------------------------------------------------------
 //* ||||------------------------------------------------------------------------------------------------------------------------
