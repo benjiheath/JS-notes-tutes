@@ -129,9 +129,7 @@ const sectionObserver = new IntersectionObserver(revealSection, {
 allSections.forEach(section => {
     sectionObserver.observe(section);
     section.classList.add('section--hidden');
-});
-
-/* 
+}); /* 
 
  
  
@@ -772,3 +770,35 @@ document.addEventListener('DOMContentLoaded', function (e) {
 //     console.log(e);
 //     e.returnValue = '';
 // });
+
+const sumOfUnique = function (nums) {
+    let arr = [];
+
+    nums.forEach(num => {
+        // const sliced = nums.slice(nums.indexOf(num), nums.indexOf(num) + 1)
+        const filtered = nums.filter(n => n !== num);
+        if (nums.length - filtered.length === 1) {
+            arr.push(num);
+        }
+    });
+    if (arr.length !== 0) {
+        const sum = arr.reduce((acc, num) => acc + num);
+        return sum;
+    } else {
+        return 0;
+    }
+};
+
+const n = [1, 2, 3, 4, 5];
+
+console.log(n.slice(n.indexOf(2), n.indexOf(2) + 1));
+
+// const filtered = n => n !== num
+
+// if nums.length - filtered.length === 1
+
+// arr.push num
+
+const arr1 = [1, 2, 3, 2];
+
+console.log(sumOfUnique(arr1));
